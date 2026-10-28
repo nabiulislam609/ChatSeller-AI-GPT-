@@ -128,6 +128,42 @@ export const InboxView: React.FC = () => {
     }
   };
 
+  const handleAssignModerator = async (modName: string) => {
+    if (!activeConv) return;
+    try {
+      await api.updateConversation(activeConv.id, {
+        assignedModeratorName: modName === 'Unassigned' ? undefined : modName,
+      });
+      showToast(`Assigned conversation to ${modName}`, 'info');
+      triggerRefresh();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to assign moderator', 'error');
+    }
+  };
+
+  const handleUpdatePriority = async (priority: Conversation['priority']) => {
+    if (!activeConv) return;
+    try {
+      await api.updateConversation(activeConv.id, { priority });
+      showToast(`Priority updated to ${priority}`, 'info');
+      triggerRefresh();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update priority', 'error');
+    }
+  };
+
+  const handleToggleResolved = async () => {
+    if (!activeConv) return;
+    const newResolved = !activeConv.isResolved;
+    try {
+      await api.updateConversation(activeConv.id, { isResolved: newResolved });
+      showToast(newResolved ? 'Conversation marked as resolved' : 'Conversation reopened', 'info');
+      triggerRefresh();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update status', 'error');
+    }
+  };
+
   const handleGenerateAiDraft = async () => {
     if (!selectedConvId) return;
     setIsGeneratingDraft(true);
@@ -252,7 +288,14 @@ export const InboxView: React.FC = () => {
                       <span className="font-mono text-[11px] text-slate-400">({activeConv.customerPhone})</span>
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-400">Facebook Messenger · {activeConv.tags.join(', ')}</div>
+                  <div className="text-[11px] text-slate-400">
+                    Facebook Messenger · {activeConv.tags.join(', ')}
+                    {activeConv.assignedModeratorName && (
+                      <span className="ml-1 text-slate-700 font-medium">
+                        · Assigned: {activeConv.assignedModeratorName}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -283,6 +326,19 @@ export const InboxView: React.FC = () => {
                       <span>AI Automating Replies</span>
                     </>
                   )}
+                </button>
+
+                {/* Resolve Toggle Button */}
+                <button
+                  onClick={handleToggleResolved}
+                  className={`px-2.5 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                    activeConv.isResolved
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  }`}
+                  title="Mark conversation as resolved"
+                >
+                  {activeConv.isResolved ? 'Resolved' : 'Mark Resolved'}
                 </button>
 
                 {/* Generate AI Draft */}
@@ -488,7 +544,40 @@ export const InboxView: React.FC = () => {
           )}
         </div>
 
-        {/* Priority & Tags */}
+        {/* Priority & Moderator Assignment */}
+        <div className="pt-4 border-t border-slate-100 space-y-3">
+          <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+            Assignment & Priority
+          </h4>
+          <div>
+            <label className="block text-[11px] text-slate-500 mb-1">Assign Moderator:</label>
+            <select
+              value={activeConv?.assignedModeratorName || 'Unassigned'}
+              onChange={(e) => handleAssignModerator(e.target.value)}
+              className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600"
+            >
+              <option value="Unassigned">Unassigned (Bot/Pool)</option>
+              <option value="Tahmina Akter">Tahmina Akter (Moderator)</option>
+              <option value="Nabin Hasan">Nabin Hasan (Owner)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[11px] text-slate-500 mb-1">Priority Level:</label>
+            <select
+              value={activeConv?.priority || 'normal'}
+              onChange={(e) => handleUpdatePriority(e.target.value as any)}
+              className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600"
+            >
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent Escalation</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Tags & Notes */}
         <div className="pt-4 border-t border-slate-100 space-y-2">
           <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1">
             Tags & Notes

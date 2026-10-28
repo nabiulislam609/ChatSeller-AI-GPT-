@@ -144,7 +144,27 @@ export const FacebookPagesView: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                onClick={async () => {
+                  try {
+                    const res = await api.simulateWebhook({
+                      customerName: 'Tanjim (Webhook Test)',
+                      customerPhone: '01719283741',
+                      messageText: 'Royal navy panjabi tar price koto? M size ache?',
+                    });
+                    showToast(`Webhook test successful! AI replied: "${res.agentReply?.text.slice(0, 45)}..."`, 'success');
+                    triggerRefresh();
+                  } catch (e: any) {
+                    showToast(e.message || 'Webhook test failed', 'error');
+                  }
+                }}
+                className="flex items-center space-x-1 px-3 py-1.5 text-xs font-semibold text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors"
+                title="Send test inbound webhook message to this page"
+              >
+                <Bot className="w-3.5 h-3.5" />
+                <span>Test Inbound Webhook</span>
+              </button>
               <button
                 onClick={() =>
                   showToast('Page status synced with Meta Graph API.', 'success')

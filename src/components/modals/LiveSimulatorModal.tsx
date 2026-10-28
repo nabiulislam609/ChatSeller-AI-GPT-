@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   RefreshCw,
   ShoppingBag,
+  Upload,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext.tsx';
 import { api } from '../../services/api.ts';
@@ -311,18 +312,41 @@ export const LiveSimulatorModal: React.FC = () => {
             }}
             className="flex items-center space-x-2"
           >
+            {/* Custom file upload for any device image */}
+            <label
+              className="p-2 text-slate-400 hover:text-blue-900 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200 cursor-pointer"
+              title="Upload your own photo from device to test Gemini vision recognition"
+            >
+              <Upload className="w-4 h-4" />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      if (reader.result) setSelectedImage(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </label>
+
             {/* Quick Demo Image Picker */}
             <div className="relative group">
               <button
                 type="button"
                 className="p-2 text-slate-400 hover:text-blue-900 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200"
-                title="Attach demo catalog photo to test Gemini vision recognition"
+                title="Attach sample catalog photo"
               >
                 <ImageIcon className="w-4 h-4" />
               </button>
               <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block bg-white border border-slate-200 rounded-lg shadow-xl p-2 w-56 z-50">
                 <div className="text-[10px] uppercase font-semibold text-slate-400 mb-1 px-1">
-                  Test Image Recognition
+                  Preset Catalog Samples
                 </div>
                 {SAMPLE_DEMO_IMAGES.map((img, i) => (
                   <button

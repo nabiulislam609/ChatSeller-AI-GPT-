@@ -36,6 +36,7 @@ export const OrdersView: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [paymentFilter, setPaymentFilter] = useState<string>('all');
   const [selectedInvoiceOrder, setSelectedInvoiceOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,8 +75,21 @@ export const OrdersView: React.FC = () => {
       o.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       o.customerPhone.includes(searchQuery);
     const matchesStatus = statusFilter === 'all' || o.orderStatus === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesPayment = paymentFilter === 'all' || o.paymentStatus === paymentFilter;
+    return matchesSearch && matchesStatus && matchesPayment;
   });
+
+  const handleQuickVerifyPayment = async (ord: Order) => {
+    const note = prompt(`Enter verification note for Order #${ord.orderNumber} (e.g. "bKash statement verified on counter"):`, 'bKash Merchant Ledger verified by staff');
+    if (note === null) return;
+    try {
+      await api.updateOrderStatus(ord.id, ord.orderStatus, note, 'Verified');
+      showToast(`Payment verified for #${ord.orderNumber}`, 'success');
+      triggerRefresh();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to verify payment', 'error');
+    }
+  };
 
   const handleOpenStatusModal = (ord: Order) => {
     setUpdatingOrder(ord);
@@ -180,20 +194,37 @@ export const OrdersView: React.FC = () => {
         </div>
 
         {/* Status Dropdown Filter */}
-        <div className="flex items-center space-x-2">
-          <span className="text-xs text-slate-500">Filter Status:</span>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white"
-          >
-            <option value="all">All Statuses ({orders.length})</option>
-            {ALL_ORDER_STATUSES.map((st) => (
-              <option key={st} value={st}>
-                {st} ({orders.filter((o) => o.orderStatus === st).length})
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs text-slate-500">Order:</span>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600 bg-white"
+            >
+              <option value="all">All Orders ({orders.length})</option>
+              {ALL_ORDER_STATUSES.map((st) => (
+                <option key={st} value={st}>
+                  {st} ({orders.filter((o) => o.orderStatus === st).length})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-1.5">
+            <span className="text-xs text-slate-500">Payment:</span>
+            <select
+              value={paymentFilter}
+              onChange={(e) => setPaymentFilter(e.target.value)}
+              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600 bg-white font-medium"
+            >
+              <option value="all">All Payments</option>
+              <option value="Unverified Claim">Unverified Claims ({orders.filter((o) => o.paymentStatus === 'Unverified Claim').length})</option>
+              <option value="Pending Verification">Pending Verification ({orders.filter((o) => o.paymentStatus === 'Pending Verification').length})</option>
+              <option value="Verified">Verified ({orders.filter((o) => o.paymentStatus === 'Verified').length})</option>
+              <option value="Paid">Paid ({orders.filter((o) => o.paymentStatus === 'Paid').length})</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -244,14 +275,14 @@ export const OrdersView: React.FC = () => {
                         ord.paymentStatus === 'Verified' || ord.paymentStatus === 'Paid'
                           ? 'bg-emerald-100 text-emerald-800'
                           : ord.paymentStatus === 'Unverified Claim'
-                          ? 'bg-amber-100 text-amber-800'
+                          ? 'bg-amber-100 text-amber-800 font-bold'
                           : 'bg-slate-100 text-slate-700'
                       }`}
                     >
                       {ord.paymentStatus}
                     </span>
                     {ord.paymentTrxId && (
-                      <div className="font-mono text-[10px] text-slate-400 mt-0.5">
+                      <div className="font-mono text-[10px] text-blue-900 font-bold mt-0.5">
                         Trx: {ord.paymentTrxId}
                       </div>
                     )}
@@ -261,6 +292,8 @@ export const OrdersView: React.FC = () => {
                       className={`inline-block px-2.5 py-1 rounded text-xs font-semibold ${
                         ord.orderStatus === 'Confirmed'
                           ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : ord.orderStatus === 'Awaiting Confirmation'
+                          ? 'bg-amber-50 text-amber-800 border border-amber-200'
                           : ord.orderStatus === 'Processing'
                           ? 'bg-blue-50 text-blue-900 border border-blue-200'
                           : ord.orderStatus === 'Shipped'
@@ -275,6 +308,16 @@ export const OrdersView: React.FC = () => {
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end space-x-1">
+                      {ord.paymentStatus !== 'Verified' && ord.paymentStatus !== 'Paid' && (
+                        <button
+                          onClick={() => handleQuickVerifyPayment(ord)}
+                          className="px-2 py-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded border border-emerald-200 flex items-center space-x-1"
+                          title="Verify payment against bank/bKash ledger"
+                        >
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>Verify</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => setSelectedInvoiceOrder(ord)}
                         className="p-1.5 text-slate-500 hover:text-blue-900 hover:bg-slate-100 rounded"

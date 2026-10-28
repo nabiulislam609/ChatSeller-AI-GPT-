@@ -17,16 +17,19 @@ export interface SalesAgentResponse {
     | 'price_inquiry'
     | 'stock_inquiry'
     | 'order_intent'
+    | 'order_details_provided'
     | 'order_confirmation'
+    | 'payment_claim'
     | 'delivery_fee_inquiry'
     | 'exchange_complaint'
     | 'general_greeting'
+    | 'human_takeover_active'
     | 'other';
   confidence: number;
   citedSources: string[];
   suggestedProductIds: string[];
   extractedOrderDetails?: {
-    isReadyToConfirm?: boolean;
+    isExplicitConfirmation?: boolean;
     customerName?: string;
     customerPhone?: string;
     deliveryAddress?: string;
@@ -36,6 +39,7 @@ export interface SalesAgentResponse {
     variantSku?: string;
     quantity?: number;
     paymentMethod?: 'Cash on Delivery' | 'bKash' | 'Nagad';
+    paymentTrxId?: string;
   };
   shouldEscalateToHuman: boolean;
   escalationReason?: string;
@@ -106,7 +110,7 @@ Communication Tone: ${aiConfig.communicationTone}
 Preferred Language Policy:
 - Respond in natural, warm, conversational Bangla (বাংলা) or Banglish, mirroring the customer's choice of script and language.
 - If customer writes in English, reply in fluent English.
-- If customer writes in Banglish (e.g. "Price koto?", "L size ache?", "order korbo"), you can reply in beautiful polite Bangla with standard Bengali script (or polite transliterated Banglish if appropriate).
+- If customer writes in Banglish (e.g. "Price koto?", "L size ache?", "order korbo"), reply in beautiful polite Bangla with standard Bengali script.
 
 Delivery Policy for Bangladesh:
 - Inside Dhaka: ৳${shippingSettings.insideDhakaFee} (Takes ${shippingSettings.insideDhakaDeliveryDays}, Cash on Delivery available).
@@ -119,15 +123,14 @@ Strict Grounding Rules:
 1. NEVER invent product prices, discounts, stock, or delivery charges. Only use the verified catalog provided.
 2. If customer asks for a product price or stock, check the catalog: provide the exact price in BDT (৳) and variant availability.
 3. Conversational Sales Flow:
-   - Price Inquiry: Give price & ask if they want to choose a size/color.
+   - Price Inquiry: Give exact catalog price & ask if they want to choose a size/color.
    - Size/Stock Inquiry: State stock status truthfully.
-   - Order Intent ("Order korbo", "I want to buy", "Nibo"): Politely collect missing info:
-     a) Product name / variant / color / size
-     b) Customer recipient full name
-     c) 11-digit Bangladesh phone number (017..., 018..., 019..., 013..., 014..., 015..., 016...)
-     d) Full delivery address (House, Road, Area, City)
-   - Order Confirmation: When you have all required info, summarize the items, unit price, delivery charge, and TOTAL amount. Ask customer to reply "Confirm" or "ঠিক আছে".
-   - Never finalize order without explicit customer confirmation of the final summary.
+   - Order Intent / Details Provided: When customer provides their name, phone number, and address:
+     * Determine delivery zone (Inside Dhaka: ৳${shippingSettings.insideDhakaFee}, Suburbs: ৳${shippingSettings.dhakaSuburbsFee}, Outside Dhaka: ৳${shippingSettings.outsideDhakaFee}).
+     * Present the itemized order summary (product, size, unit price, delivery charge, total amount).
+     * DO NOT treat the order as confirmed yet! Explicitly ask the customer to reply "Confirm" or "ঠিক আছে" to confirm.
+   - Explicit Order Confirmation: ONLY when the customer explicitly says "Confirm", "ঠিক আছে", "confirm korchi", "all ok", etc., thank them and provide confirmation.
+   - Payment TrxID Claim: When customer provides a bKash/Nagad TrxID, acknowledge receipt and explain that our accounts team will verify the payment against the merchant ledger. Never claim payment is verified automatically.
 
 Store Knowledge & Policies:
 ${policyText}
@@ -146,13 +149,13 @@ Customer Name: ${customerName || 'Customer'}
 
 Analyze the message and return a JSON object strictly adhering to this schema:
 {
-  "replyText": "The actual message text to send to the customer in Messenger",
-  "detectedIntent": "price_inquiry" | "stock_inquiry" | "order_intent" | "order_confirmation" | "delivery_fee_inquiry" | "exchange_complaint" | "general_greeting" | "other",
+  "replyText": "The message text to send to the customer in Messenger",
+  "detectedIntent": "price_inquiry" | "stock_inquiry" | "order_intent" | "order_details_provided" | "order_confirmation" | "payment_claim" | "delivery_fee_inquiry" | "exchange_complaint" | "general_greeting" | "other",
   "confidence": 0.0 to 1.0,
   "citedSources": ["list of product SKUs or policy titles used"],
   "suggestedProductIds": ["matching product IDs from catalog"],
   "extractedOrderDetails": {
-    "isReadyToConfirm": boolean,
+    "isExplicitConfirmation": boolean,
     "customerName": "string or null",
     "customerPhone": "string or null",
     "deliveryAddress": "string or null",
@@ -161,7 +164,8 @@ Analyze the message and return a JSON object strictly adhering to this schema:
     "productName": "string or null",
     "variantSku": "string or null",
     "quantity": number or 1,
-    "paymentMethod": "Cash on Delivery" | "bKash" | "Nagad"
+    "paymentMethod": "Cash on Delivery" | "bKash" | "Nagad",
+    "paymentTrxId": "string or null"
   },
   "shouldEscalateToHuman": boolean,
   "escalationReason": "string or null"
@@ -345,7 +349,88 @@ function fallbackResponseGenerator(
 ): SalesAgentResponse {
   const text = msg.toLowerCase();
 
-  // Price inquiry
+  // 1. Payment TrxID claim
+  const trxMatch = msg.match(/(?:trxid|trx|transaction|txid|বিকাশ|নগদ)[:\s]*([A-Za-z0-9]{8,14})/i);
+  if (trxMatch || text.includes('trxid') || text.includes('টাকা পাঠাইছি') || text.includes('paid advance')) {
+    const trxId = trxMatch ? trxMatch[1] : 'BK9A82J1LK';
+    return {
+      replyText: `ধন্যবাদ! আপনার পেমেন্ট রেফারেন্স (TrxID: ${trxId}) আমরা পেয়েছি। 📝\n\nনিরাপত্তার স্বার্থে আমাদের অ্যাকাউন্টস টিম বিকাশ/নগদ মার্চেন্ট স্টেটমেন্ট চেক করে স্ট্যাটাস আপডেট করবেন (Pending Verification)। পার্সেল প্যাকেজিংয়ের কাজ শুরু হয়েছে।`,
+      detectedIntent: 'payment_claim',
+      confidence: 0.95,
+      citedSources: ['Payment Policy: Claims recorded as Pending Verification'],
+      suggestedProductIds: [],
+      extractedOrderDetails: {
+        paymentTrxId: trxId,
+      },
+      shouldEscalateToHuman: false,
+    };
+  }
+
+  // 2. Order details provided by customer (Name, phone, address in message)
+  const phoneMatch = msg.match(/01[3-9]\d{8}/);
+  const hasAddressWords = text.includes('road') || text.includes('house') || text.includes('sector') || text.includes('dhaka') || text.includes('chittagong') || text.includes('মিরপুর') || text.includes('উত্তরা') || text.includes('বাসা') || text.includes('ঠিকানা');
+
+  if (phoneMatch || (hasAddressWords && (text.includes('name:') || text.includes('address:') || text.includes('নাম:')))) {
+    const topProd = products[0];
+    const isOutsideDhaka = text.includes('chittagong') || text.includes('sylhet') || text.includes('rajshahi') || text.includes('khulna') || text.includes('barisal') || text.includes('কুমিল্লা') || text.includes('চট্টগ্রাম') || text.includes('বগুড়া');
+    const isSuburbs = text.includes('savar') || text.includes('gazipur') || text.includes('কেরানীগঞ্জ') || text.includes('সাভার') || text.includes('গাজীপুর');
+
+    const deliveryCity = isOutsideDhaka ? 'Outside Dhaka' : isSuburbs ? 'Dhaka Suburbs' : 'Inside Dhaka';
+    const deliveryFee = deliveryCity === 'Inside Dhaka' ? shipping.insideDhakaFee : deliveryCity === 'Dhaka Suburbs' ? shipping.dhakaSuburbsFee : shipping.outsideDhakaFee;
+    const prodPrice = topProd ? (topProd.salePrice || topProd.price) : 2350;
+    const total = prodPrice + deliveryFee;
+
+    const phone = phoneMatch ? phoneMatch[0] : '01712998877';
+    let customerName = 'Customer';
+    const nameMatch = msg.match(/(?:name|নাম)[:\s]*([^\n,]+)/i);
+    if (nameMatch) customerName = nameMatch[1].trim();
+
+    return {
+      replyText: `ধন্যবাদ ${customerName}! আপনার অর্ডারের সারসংক্ষেপ প্রস্তুত করা হয়েছে:\n\n📦 পণ্য: ${topProd?.name || 'Royal Heritage Semi-Fitted Silk Panjabi'} (L)\n💰 মূল্য: ৳${prodPrice.toLocaleString()}\n🚚 ডেলিভারি চার্জ (${deliveryCity}): ৳${deliveryFee}\n💵 সর্বমোট প্রদেয়: ৳${total.toLocaleString()} (ক্যাশ অন ডেলিভারি)\n📱 মোবাইল: ${phone}\n📍 ঠিকানা: ${msg.split('\n').find(l => l.toLowerCase().includes('address') || l.toLowerCase().includes('ঠিকানা')) || 'উত্তরা, ঢাকা'}\n\nসবকিছু ঠিক থাকলে দয়া করে "Confirm" অথবা "ঠিক আছে" লিখে নিশ্চিত করুন।`,
+      detectedIntent: 'order_details_provided',
+      confidence: 0.95,
+      citedSources: [`Catalog: ${topProd?.sku || 'AT-PANJABI-ROYAL-NAVY'}`, `Delivery Zone: ${deliveryCity}`],
+      suggestedProductIds: topProd ? [topProd.id] : [],
+      extractedOrderDetails: {
+        isExplicitConfirmation: false,
+        customerName,
+        customerPhone: phone,
+        deliveryAddress: msg,
+        deliveryCity,
+        productId: topProd?.id,
+        productName: topProd?.name,
+        variantSku: topProd?.variants[0]?.sku || 'AT-P-NV-L',
+        quantity: 1,
+        paymentMethod: 'Cash on Delivery',
+      },
+      shouldEscalateToHuman: false,
+    };
+  }
+
+  // 3. Explicit Confirmation detected
+  if (
+    text.includes('confirm') ||
+    text.includes('thik ache') ||
+    text.includes('ঠিক আছে') ||
+    text.includes('হাঁ') ||
+    text.includes('yes') ||
+    text.includes('finalize') ||
+    text.includes('কনফার্ম')
+  ) {
+    return {
+      replyText: `আলহামদুলিল্লাহ! আপনার অর্ডারটি নিশ্চিত করা হয়েছে। 🎉\n\n🆔 অর্ডার স্ট্যাটাস: Confirmed\n🚚 ডেলিভারি: ২৪ থেকে ৪৮ ঘণ্টার মধ্যে ডেলিভারি রাইডার সরাসরি ফোনে যোগাযোগ করবেন।\n\nআভা ট্রেন্ডসের সাথে থাকার জন্য আন্তরিক ধন্যবাদ!`,
+      detectedIntent: 'order_confirmation',
+      confidence: 0.96,
+      citedSources: ['Order Confirmation Workflow'],
+      suggestedProductIds: [],
+      shouldEscalateToHuman: false,
+      extractedOrderDetails: {
+        isExplicitConfirmation: true,
+      },
+    };
+  }
+
+  // 4. Price inquiry
   if (text.includes('price') || text.includes('দাম') || text.includes('koto') || text.includes('rate')) {
     const matched = products.find(
       (p) =>
@@ -356,7 +441,7 @@ function fallbackResponseGenerator(
 
     if (matched) {
       return {
-        replyText: `Assalamu Alaikum! আমাদের "${matched.name}"-এর অফার মূল্য এখন মাত্র ৳${matched.salePrice || matched.price} (নিয়মিত মূল্য ৳${matched.price})।\n\nউপলব্ধ সাইজ: ${matched.sizes.join(', ')}। স্টক সীমিত, আপনি কোন সাইজটি নিতে চান?`,
+        replyText: `Assalamu Alaikum! আমাদের "${matched.name}"-এর অফার মূল্য এখন মাত্র ৳${(matched.salePrice || matched.price).toLocaleString()} (নিয়মিত মূল্য ৳${matched.price.toLocaleString()})।\n\nউপলব্ধ সাইজ: ${matched.sizes.join(', ')}। স্টক সীমিত, আপনি কোন সাইজটি নিতে চান?`,
         detectedIntent: 'price_inquiry',
         confidence: 0.95,
         citedSources: [`Catalog SKU: ${matched.sku}`],
@@ -366,7 +451,7 @@ function fallbackResponseGenerator(
     }
   }
 
-  // Size / stock inquiry
+  // 5. Size / stock inquiry
   if (text.includes('size') || text.includes('stock') || text.includes('ache') || text.includes('available')) {
     const matched = products[0];
     return {
@@ -379,7 +464,7 @@ function fallbackResponseGenerator(
     };
   }
 
-  // Order intent
+  // 6. Order intent ("Order korbo")
   if (text.includes('order') || text.includes('অর্ডার') || text.includes('nibo') || text.includes('kinbo') || text.includes('buy')) {
     return {
       replyText: `অর্ডারটি কনফার্ম করতে দয়া করে আপনার:\n১. সম্পূর্ণ নাম\n২. সক্রিয় মোবাইল নাম্বার (১১ ডিজিট)\n৩. বিস্তারিত ডেলিভারি ঠিকানা (বাসা, রোড, এলাকা)\n\nলিখে পাঠিয়ে দিন। ঢাকার মধ্যে ডেলিভারি চার্জ মাত্র ৳${shipping.insideDhakaFee} এবং ঢাকার বাইরে ৳${shipping.outsideDhakaFee}।`,
@@ -388,21 +473,6 @@ function fallbackResponseGenerator(
       citedSources: ['Delivery Settings'],
       suggestedProductIds: [products[0]?.id].filter(Boolean),
       shouldEscalateToHuman: false,
-    };
-  }
-
-  // Confirmation detected
-  if (text.includes('confirm') || text.includes('thik ache') || text.includes('হাঁ') || text.includes('yes') || text.includes('finalize')) {
-    return {
-      replyText: `আলহামদুলিল্লাহ! আপনার অর্ডারটি নিশ্চিত করা হয়েছে। 🎉\n\nআমাদের ডেলিভারি টিম দ্রুত পার্সেলটি প্রস্তুত করছে। পার্সেল ডেলিভারির পূর্বে রাইডার আপনাকে সরাসরি ফোনে যোগাযোগ করবেন। আভা ট্রেন্ডসের সাথে থাকার জন্য ধন্যবাদ!`,
-      detectedIntent: 'order_confirmation',
-      confidence: 0.96,
-      citedSources: ['Order Confirmation Workflow'],
-      suggestedProductIds: [],
-      shouldEscalateToHuman: false,
-      extractedOrderDetails: {
-        isReadyToConfirm: true,
-      },
     };
   }
 

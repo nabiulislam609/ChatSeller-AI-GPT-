@@ -280,6 +280,156 @@ export async function runAutomatedTests(): Promise<{
     }
   }
 
+  // 8. End-to-End Draft -> Explicit Customer Confirmation Workflow
+  {
+    const start = Date.now();
+    try {
+      const wsId = 'ws-aura-dhaka-101';
+      const pages = db.getFacebookPages(wsId);
+      const pageId = pages[0]?.id || 'page-aura-01';
+
+      // 1. Create a fresh conversation
+      const testConv = {
+        id: `conv-test-confirm-${Date.now()}`,
+        workspaceId: wsId,
+        facebookPageId: pageId,
+        customerName: 'Tanvir Hossain',
+        customerPhone: '01711223344',
+        customerProfilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+        customerFacebookId: `fb_test_${Date.now()}`,
+        unreadCount: 0,
+        lastMessageSnippet: 'Test message',
+        lastMessageTime: new Date().toISOString(),
+        isAiEnabled: true,
+        isHumanTakeover: false,
+        priority: 'normal' as const,
+        tags: ['Automated Test'],
+        isResolved: false,
+        createdAt: new Date().toISOString(),
+      };
+      (db as any).data.conversations.push(testConv);
+
+      // Step A: Customer provides address details
+      const step1 = await (await import('./routes/webhook.ts')).processCustomerMessageWorkflow({
+        workspaceId: wsId,
+        conv: testConv,
+        customerMessageText: 'Amar name Tanvir, phone 01711223344, address Uttara Sector 4, Dhaka. Ami Royal Silk Panjabi ta nibo size L.',
+      });
+
+      const orderAfterStep1 = step1.updatedOrder;
+      const isDraftAwaiting = orderAfterStep1 && orderAfterStep1.orderStatus === 'Awaiting Confirmation';
+
+      // Step B: Customer sends explicit confirmation
+      const step2 = await (await import('./routes/webhook.ts')).processCustomerMessageWorkflow({
+        workspaceId: wsId,
+        conv: testConv,
+        customerMessageText: 'Haa thik ache, ami confirm korlam, order confirm kore din.',
+      });
+
+      const orderAfterStep2 = step2.updatedOrder;
+      const isConfirmed = orderAfterStep2 && orderAfterStep2.orderStatus === 'Confirmed';
+
+      // Cleanup
+      if (orderAfterStep2) {
+        (db as any).data.orders = (db as any).data.orders.filter((o: any) => o.id !== orderAfterStep2.id);
+      }
+      (db as any).data.conversations = (db as any).data.conversations.filter((c: any) => c.id !== testConv.id);
+
+      const pass = Boolean(isDraftAwaiting && isConfirmed);
+      results.push({
+        name: 'Draft to Explicit Customer Confirmation Flow',
+        category: 'Orders',
+        passed: pass,
+        durationMs: Date.now() - start,
+        details: pass
+          ? 'Strict confirmation verified: Order held in "Awaiting Confirmation" until customer explicitly confirmed.'
+          : `Step 1 status: ${orderAfterStep1?.orderStatus}, Step 2 status: ${orderAfterStep2?.orderStatus}`,
+      });
+    } catch (e: any) {
+      results.push({
+        name: 'Draft to Explicit Customer Confirmation Flow',
+        category: 'Orders',
+        passed: false,
+        durationMs: Date.now() - start,
+        details: e.message,
+      });
+    }
+  }
+
+  // 9. Human Moderator Takeover Locks Out Automated AI Auto-Replies
+  {
+    const start = Date.now();
+    try {
+      const wsId = 'ws-aura-dhaka-101';
+      const pages = db.getFacebookPages(wsId);
+      const pageId = pages[0]?.id || 'page-aura-01';
+
+      // Create conversation with human takeover enabled
+      const takeoverConv = {
+        id: `conv-test-takeover-${Date.now()}`,
+        workspaceId: wsId,
+        facebookPageId: pageId,
+        customerName: 'Angry Customer Requesting Manager',
+        customerPhone: '01999887766',
+        customerProfilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+        customerFacebookId: `fb_takeover_${Date.now()}`,
+        unreadCount: 0,
+        lastMessageSnippet: 'Takeover active',
+        lastMessageTime: new Date().toISOString(),
+        isAiEnabled: false,
+        isHumanTakeover: true,
+        priority: 'urgent' as const,
+        tags: ['Takeover Test'],
+        isResolved: false,
+        createdAt: new Date().toISOString(),
+      };
+      (db as any).data.conversations.push(takeoverConv);
+
+      // Attempt customer message while human takeover is active
+      const workflowResult = await (await import('./routes/webhook.ts')).processCustomerMessageWorkflow({
+        workspaceId: wsId,
+        conv: takeoverConv,
+        customerMessageText: 'Kobe delivery hobe? Amar order ta ko?',
+      });
+
+      const aiWasPaused = workflowResult.aiResponse.detectedIntent === 'human_takeover_active' ||
+        workflowResult.agentMessage.isAiGenerated === false;
+
+      // Moderator sends real human reply
+      const modMsg = db.addMessage({
+        conversationId: takeoverConv.id,
+        sender: 'human_moderator',
+        senderName: 'Nabin Hasan (Owner)',
+        text: 'Hello sir, ami apnar delivery status courier tracking theke check kore bolchi.',
+        status: 'delivered',
+      });
+
+      const pass = aiWasPaused && modMsg.sender === 'human_moderator';
+
+      // Cleanup
+      (db as any).data.conversations = (db as any).data.conversations.filter((c: any) => c.id !== takeoverConv.id);
+      (db as any).data.messages = (db as any).data.messages.filter((m: any) => m.conversationId !== takeoverConv.id);
+
+      results.push({
+        name: 'Human Moderator Takeover & AI Auto-Reply Suppression',
+        category: 'Moderation',
+        passed: pass,
+        durationMs: Date.now() - start,
+        details: pass
+          ? 'Human takeover active: Automated AI silenced; moderator reply sent successfully.'
+          : 'AI did not suppress replies during human takeover!',
+      });
+    } catch (e: any) {
+      results.push({
+        name: 'Human Moderator Takeover & AI Auto-Reply Suppression',
+        category: 'Moderation',
+        passed: false,
+        durationMs: Date.now() - start,
+        details: e.message,
+      });
+    }
+  }
+
   const passed = results.filter((r) => r.passed).length;
   const failed = results.filter((r) => !r.passed).length;
 
