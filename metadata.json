@@ -1,0 +1,6 @@
+{
+  "name": "AI Sales Agent",
+  "description": "Multi-tenant AI sales agent and Facebook Messenger automation platform for Bangladeshi e-commerce with bilingual Bangla/English support, conversational ordering, and product vision recognition.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

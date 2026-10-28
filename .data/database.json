@@ -1,0 +1,908 @@
+{
+  "users": [
+    {
+      "id": "usr-admin-01",
+      "email": "nabin.llcg@gmail.com",
+      "fullName": "Nabin Hasan",
+      "role": "Owner",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-01-15T10:00:00Z"
+    },
+    {
+      "id": "usr-mod-02",
+      "email": "tahmina.sales@auratrends.com",
+      "fullName": "Tahmina Akter",
+      "role": "Moderator",
+      "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-02-01T11:00:00Z"
+    }
+  ],
+  "workspaces": [
+    {
+      "id": "ws-aura-dhaka-101",
+      "name": "Aura Trends Dhaka",
+      "slug": "aura-trends-dhaka",
+      "ownerId": "usr-admin-01",
+      "plan": "Growth",
+      "currency": "BDT",
+      "currencySymbol": "৳",
+      "createdAt": "2026-01-15T10:00:00Z"
+    }
+  ],
+  "workspaceMembers": [
+    {
+      "id": "wm-1",
+      "workspaceId": "ws-aura-dhaka-101",
+      "userId": "usr-admin-01",
+      "userEmail": "nabin.llcg@gmail.com",
+      "userName": "Nabin Hasan",
+      "role": "Owner",
+      "joinedAt": "2026-01-15T10:00:00Z"
+    },
+    {
+      "id": "wm-2",
+      "workspaceId": "ws-aura-dhaka-101",
+      "userId": "usr-mod-02",
+      "userEmail": "tahmina.sales@auratrends.com",
+      "userName": "Tahmina Akter",
+      "role": "Moderator",
+      "joinedAt": "2026-02-01T11:00:00Z"
+    }
+  ],
+  "facebookPages": [
+    {
+      "id": "page-aura-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "pageId": "109283748291029",
+      "pageName": "Aura Trends Dhaka - Official",
+      "category": "Clothing (Brand)",
+      "fanCount": 48500,
+      "accessTokenMasked": "EAAX7...89Z1P",
+      "connectionStatus": "connected",
+      "isDemoMode": true,
+      "webhookSubscribed": true,
+      "lastSyncAt": "2026-10-28T06:26:21.256Z",
+      "avatarUrl": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=200&q=80"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "sku": "AT-PANJABI-ROYAL-NAVY",
+      "name": "Royal Heritage Semi-Fitted Silk Panjabi",
+      "nameBn": "রয়েল হেরিটেজ সেমি-ফিটেড সিল্ক পাঞ্জাবি",
+      "description": "Premium jacquard blended silk panjabi with fine thread embroidery on collar and placket. Perfect for Eid and celebrations.",
+      "category": "Panjabi",
+      "price": 2650,
+      "salePrice": 2350,
+      "images": [
+        "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"
+      ],
+      "colors": [
+        "Navy Blue",
+        "Maroon",
+        "Jet Black"
+      ],
+      "sizes": [
+        "M (40)",
+        "L (42)",
+        "XL (44)",
+        "XXL (46)"
+      ],
+      "variants": [
+        {
+          "id": "v-01-m-navy",
+          "color": "Navy Blue",
+          "size": "M (40)",
+          "sku": "AT-P-NV-M",
+          "price": 2350,
+          "stock": 12
+        },
+        {
+          "id": "v-01-l-navy",
+          "color": "Navy Blue",
+          "size": "L (42)",
+          "sku": "AT-P-NV-L",
+          "price": 2350,
+          "stock": 8
+        },
+        {
+          "id": "v-01-xl-navy",
+          "color": "Navy Blue",
+          "size": "XL (44)",
+          "sku": "AT-P-NV-XL",
+          "price": 2350,
+          "stock": 15
+        },
+        {
+          "id": "v-01-m-blk",
+          "color": "Jet Black",
+          "size": "M (40)",
+          "sku": "AT-P-BK-M",
+          "price": 2350,
+          "stock": 6
+        },
+        {
+          "id": "v-01-l-blk",
+          "color": "Jet Black",
+          "size": "L (42)",
+          "sku": "AT-P-BK-L",
+          "price": 2350,
+          "stock": 10
+        }
+      ],
+      "stockQuantity": 51,
+      "shippingEligible": true,
+      "faqs": [
+        {
+          "question": "Size chart kemon?",
+          "answer": "Chest: M=40\", L=42\", XL=44\", XXL=46\". Length is 41-43 inches."
+        },
+        {
+          "question": "Dry wash lagbe?",
+          "answer": "Gentle hand wash with mild liquid detergent or dry clean recommended."
+        }
+      ],
+      "status": "active",
+      "createdAt": "2026-01-20T10:00:00Z",
+      "updatedAt": "2026-02-15T12:00:00Z"
+    },
+    {
+      "id": "prod-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "sku": "AT-SAREE-CRIMSON-GEORGETTE",
+      "name": "Crimson Velvet Zari Border Georgette Saree",
+      "nameBn": "ক্রিমসন ভেলভেট জরি বর্ডার জর্জেট শাড়ি",
+      "description": "Flowy weightless pure georgette saree featuring intricate dull-gold antique zari work and matched unstitched blouse piece.",
+      "category": "Saree",
+      "price": 3850,
+      "salePrice": 3450,
+      "images": [
+        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80"
+      ],
+      "colors": [
+        "Crimson Red",
+        "Emerald Green",
+        "Royal Plum"
+      ],
+      "sizes": [
+        "Free Size (12 Haath)"
+      ],
+      "variants": [
+        {
+          "id": "v-02-red",
+          "color": "Crimson Red",
+          "size": "Free Size",
+          "sku": "AT-SAR-RED",
+          "price": 3450,
+          "stock": 9
+        },
+        {
+          "id": "v-02-grn",
+          "color": "Emerald Green",
+          "size": "Free Size",
+          "sku": "AT-SAR-GRN",
+          "price": 3450,
+          "stock": 5
+        }
+      ],
+      "stockQuantity": 14,
+      "shippingEligible": true,
+      "faqs": [
+        {
+          "question": "Blouse piece shathe ache?",
+          "answer": "Haa, matching 80cm unstitched zari worked blouse piece shathe thakbe."
+        }
+      ],
+      "status": "active",
+      "createdAt": "2026-01-22T10:00:00Z",
+      "updatedAt": "2026-02-14T08:00:00Z"
+    },
+    {
+      "id": "prod-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "sku": "AT-KURTI-PASTEL-LINEN",
+      "name": "Pastel Lilac Embroidered Linen Kurti",
+      "nameBn": "প্যাস্টেল লাইলাক এমব্রয়ডারিড লিনেন কুর্তি",
+      "description": "Breathable 100% pure organic cotton-linen kurti with delicate Kashmiri inspired floral threadwork across neckline.",
+      "category": "Kurti",
+      "price": 1850,
+      "salePrice": 1650,
+      "images": [
+        "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80"
+      ],
+      "colors": [
+        "Pastel Lilac",
+        "Mint Sage",
+        "Peach Rose"
+      ],
+      "sizes": [
+        "S (36)",
+        "M (38)",
+        "L (40)",
+        "XL (42)"
+      ],
+      "variants": [
+        {
+          "id": "v-03-lilac-m",
+          "color": "Pastel Lilac",
+          "size": "M (38)",
+          "sku": "AT-K-LIL-M",
+          "price": 1650,
+          "stock": 14
+        },
+        {
+          "id": "v-03-lilac-l",
+          "color": "Pastel Lilac",
+          "size": "L (40)",
+          "sku": "AT-K-LIL-L",
+          "price": 1650,
+          "stock": 18
+        },
+        {
+          "id": "v-03-mint-m",
+          "color": "Mint Sage",
+          "size": "M (38)",
+          "sku": "AT-K-MNT-M",
+          "price": 1650,
+          "stock": 7
+        }
+      ],
+      "stockQuantity": 39,
+      "shippingEligible": true,
+      "status": "active",
+      "createdAt": "2026-02-01T10:00:00Z",
+      "updatedAt": "2026-02-18T10:00:00Z"
+    },
+    {
+      "id": "prod-04",
+      "workspaceId": "ws-aura-dhaka-101",
+      "sku": "AT-POLO-PIQUE-LUXE",
+      "name": "Supima Cotton Mercerized Polo Shirt",
+      "nameBn": "সুপিমা কটন মারসেরাইজড পোলো শার্ট",
+      "description": "Ultra-soft 240 GSM combed cotton polo shirt with mother-of-pearl buttons and anti-curl collar.",
+      "category": "Polo & Casuals",
+      "price": 1250,
+      "salePrice": 990,
+      "images": [
+        "https://images.unsplash.com/photo-1625910513413-722420a3fb1b?auto=format&fit=crop&w=600&q=80"
+      ],
+      "colors": [
+        "Classic Navy",
+        "Charcoal Grey",
+        "Olive Moss"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "variants": [
+        {
+          "id": "v-04-navy-m",
+          "color": "Classic Navy",
+          "size": "M",
+          "sku": "AT-POLO-NV-M",
+          "price": 990,
+          "stock": 22
+        },
+        {
+          "id": "v-04-navy-l",
+          "color": "Classic Navy",
+          "size": "L",
+          "sku": "AT-POLO-NV-L",
+          "price": 990,
+          "stock": 30
+        },
+        {
+          "id": "v-04-char-l",
+          "color": "Charcoal Grey",
+          "size": "L",
+          "sku": "AT-POLO-CH-L",
+          "price": 990,
+          "stock": 16
+        }
+      ],
+      "stockQuantity": 68,
+      "shippingEligible": true,
+      "status": "active",
+      "createdAt": "2026-02-05T10:00:00Z",
+      "updatedAt": "2026-02-20T10:00:00Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Tanjim Ahmed",
+      "phone": "01719283741",
+      "address": "House 14, Road 7, Sector 3, Uttara, Dhaka",
+      "city": "Inside Dhaka",
+      "facebookId": "fb_cust_91823",
+      "totalOrders": 3,
+      "totalSpent": 7150,
+      "tags": [
+        "VIP",
+        "Repeat Buyer"
+      ],
+      "notes": "Prefers evening deliveries after 6 PM.",
+      "lastActiveAt": "2026-10-28T06:14:21.257Z"
+    },
+    {
+      "id": "cust-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Nusrat Jahan",
+      "phone": "01812938475",
+      "address": "GEC Circle, Nasirabad, Chittagong",
+      "city": "Outside Dhaka",
+      "facebookId": "fb_cust_48291",
+      "totalOrders": 1,
+      "totalSpent": 3580,
+      "tags": [
+        "COD Confirmed",
+        "Outside Dhaka"
+      ],
+      "notes": "Paid bKash delivery fee advance promptly.",
+      "lastActiveAt": "2026-10-28T05:41:21.257Z"
+    },
+    {
+      "id": "cust-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Rahat Chowdhury",
+      "phone": "01928374615",
+      "address": "Block C, Mirpur 10, Dhaka",
+      "city": "Inside Dhaka",
+      "facebookId": "fb_cust_10293",
+      "totalOrders": 1,
+      "totalSpent": 2420,
+      "tags": [
+        "New Customer"
+      ],
+      "lastActiveAt": "2026-10-28T04:26:21.257Z"
+    },
+    {
+      "id": "cust-1793168786699",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Test bKash Buyer",
+      "phone": "01811223344",
+      "address": "Chittagong",
+      "city": "Outside Dhaka",
+      "totalOrders": 1,
+      "totalSpent": 1130,
+      "tags": [
+        "New Customer"
+      ],
+      "lastActiveAt": "2026-10-28T06:26:26.699Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-1001",
+      "orderNumber": "ORD-8942",
+      "workspaceId": "ws-aura-dhaka-101",
+      "customerName": "Tanjim Ahmed",
+      "customerPhone": "01719283741",
+      "deliveryAddress": "House 14, Road 7, Sector 3, Uttara, Dhaka",
+      "deliveryCity": "Inside Dhaka",
+      "items": [
+        {
+          "id": "item-1",
+          "productId": "prod-01",
+          "productName": "Royal Heritage Semi-Fitted Silk Panjabi",
+          "sku": "AT-P-NV-L",
+          "variant": "Navy Blue / L (42)",
+          "quantity": 1,
+          "unitPrice": 2350,
+          "totalPrice": 2350,
+          "imageUrl": "https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "subtotal": 2350,
+      "deliveryFee": 70,
+      "discount": 0,
+      "total": 2420,
+      "advancePaymentRequired": false,
+      "advanceAmount": 0,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending Verification",
+      "orderStatus": "Confirmed",
+      "statusHistory": [
+        {
+          "status": "Draft",
+          "timestamp": "2026-03-24T14:10:00Z",
+          "note": "AI captured customer intent"
+        },
+        {
+          "status": "Awaiting Confirmation",
+          "timestamp": "2026-03-24T14:12:00Z",
+          "note": "Order summary presented to buyer"
+        },
+        {
+          "status": "Confirmed",
+          "timestamp": "2026-03-24T14:13:00Z",
+          "note": "Customer confirmed details via Messenger"
+        }
+      ],
+      "conversationId": "conv-01",
+      "internalNotes": "Customer verified phone number via OTP/Call check.",
+      "createdAt": "2026-03-24T14:13:00Z",
+      "updatedAt": "2026-03-24T14:15:00Z"
+    },
+    {
+      "id": "ord-1002",
+      "orderNumber": "ORD-8941",
+      "workspaceId": "ws-aura-dhaka-101",
+      "customerName": "Nusrat Jahan",
+      "customerPhone": "01812938475",
+      "deliveryAddress": "House 8, Road 2, GEC Circle, Nasirabad, Chittagong",
+      "deliveryCity": "Outside Dhaka",
+      "items": [
+        {
+          "id": "item-2",
+          "productId": "prod-02",
+          "productName": "Crimson Velvet Zari Border Georgette Saree",
+          "sku": "AT-SAR-RED",
+          "variant": "Crimson Red / Free Size",
+          "quantity": 1,
+          "unitPrice": 3450,
+          "totalPrice": 3450,
+          "imageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "subtotal": 3450,
+      "deliveryFee": 130,
+      "discount": 0,
+      "total": 3580,
+      "advancePaymentRequired": true,
+      "advanceAmount": 130,
+      "paymentMethod": "bKash",
+      "paymentStatus": "Verified",
+      "paymentTrxId": "BK9A82J1LK",
+      "paymentSenderNumber": "01812938475",
+      "orderStatus": "Processing",
+      "statusHistory": [
+        {
+          "status": "Draft",
+          "timestamp": "2026-03-24T09:00:00Z"
+        },
+        {
+          "status": "Awaiting Payment",
+          "timestamp": "2026-03-24T09:15:00Z",
+          "note": "bKash ৳130 delivery fee requested"
+        },
+        {
+          "status": "Confirmed",
+          "timestamp": "2026-03-24T09:30:00Z",
+          "note": "bKash TrxID BK9A82J1LK verified by admin"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-03-24T10:00:00Z",
+          "note": "Package forwarded to packing dispatch"
+        }
+      ],
+      "conversationId": "conv-02",
+      "internalNotes": "Courier parcel Steadfast ID: ST-99214.",
+      "createdAt": "2026-03-24T09:30:00Z",
+      "updatedAt": "2026-03-24T10:00:00Z"
+    },
+    {
+      "workspaceId": "ws-aura-dhaka-101",
+      "customerName": "Test bKash Buyer",
+      "customerPhone": "01811223344",
+      "deliveryAddress": "Chittagong",
+      "deliveryCity": "Outside Dhaka",
+      "items": [],
+      "subtotal": 1000,
+      "deliveryFee": 130,
+      "discount": 0,
+      "total": 1130,
+      "advancePaymentRequired": true,
+      "advanceAmount": 130,
+      "paymentMethod": "bKash",
+      "paymentStatus": "Verified",
+      "paymentTrxId": "FAKE_TRX_999",
+      "orderStatus": "Confirmed",
+      "statusHistory": [
+        {
+          "status": "Confirmed",
+          "timestamp": "2026-10-28T06:26:26.699Z",
+          "note": "Admin verified bKash ledger",
+          "updatedBy": "Admin"
+        }
+      ],
+      "id": "ord-1793168786699",
+      "orderNumber": "ORD-4210",
+      "createdAt": "2026-10-28T06:26:26.699Z",
+      "updatedAt": "2026-10-28T06:26:26.699Z"
+    }
+  ],
+  "conversations": [
+    {
+      "id": "conv-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "facebookPageId": "page-aura-01",
+      "customerName": "Tanjim Ahmed",
+      "customerProfilePic": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "customerFacebookId": "fb_cust_91823",
+      "customerPhone": "01719283741",
+      "unreadCount": 0,
+      "lastMessageSnippet": "Ami confirm korchi, order ta finalize kore din.",
+      "lastMessageTime": "2026-10-28T06:14:21.257Z",
+      "isAiEnabled": true,
+      "isHumanTakeover": false,
+      "priority": "high",
+      "tags": [
+        "Order Completed",
+        "Panjabi"
+      ],
+      "isResolved": false,
+      "createdAt": "2026-10-28T05:26:21.257Z"
+    },
+    {
+      "id": "conv-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "facebookPageId": "page-aura-01",
+      "customerName": "Nusrat Jahan",
+      "customerProfilePic": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+      "customerFacebookId": "fb_cust_48291",
+      "customerPhone": "01812938475",
+      "unreadCount": 0,
+      "lastMessageSnippet": "TrxID disi: BK9A82J1LK. Check kore janaben please.",
+      "lastMessageTime": "2026-10-28T05:41:21.257Z",
+      "isAiEnabled": true,
+      "isHumanTakeover": false,
+      "priority": "normal",
+      "tags": [
+        "bKash Advance",
+        "Saree"
+      ],
+      "isResolved": false,
+      "createdAt": "2026-10-28T03:26:21.257Z"
+    },
+    {
+      "id": "conv-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "facebookPageId": "page-aura-01",
+      "customerName": "Sabrina Karim",
+      "customerProfilePic": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+      "customerFacebookId": "fb_cust_77218",
+      "customerPhone": "01755123987",
+      "unreadCount": 1,
+      "lastMessageSnippet": "Ami kurti ta exchange korte chai, size choto hoyeche. Kono manush kotha bolte parbe?",
+      "lastMessageTime": "2026-10-28T06:18:21.257Z",
+      "isAiEnabled": false,
+      "isHumanTakeover": true,
+      "assignedModeratorId": "usr-mod-02",
+      "assignedModeratorName": "Tahmina Akter",
+      "priority": "urgent",
+      "tags": [
+        "Handoff Escalated",
+        "Exchange Request"
+      ],
+      "isResolved": false,
+      "createdAt": "2026-10-28T04:46:21.257Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-101",
+      "conversationId": "conv-01",
+      "sender": "customer",
+      "senderName": "Tanjim Ahmed",
+      "text": "Royal navy panjabi tar price koto? L size ache?",
+      "timestamp": "2026-10-28T05:56:21.257Z",
+      "status": "read"
+    },
+    {
+      "id": "msg-102",
+      "conversationId": "conv-01",
+      "sender": "agent",
+      "senderName": "Aura AI Sales Agent",
+      "text": "Assalamu Alaikum Tanjim bhai! আমাদের Royal Heritage Semi-Fitted Silk Panjabi (Navy Blue)-এর অফার প্রাইস এখন ৳২,৩৫০ (রেগুলার ৳২,৬৫০)।\n\nজি, L (42) সাইজে বর্তমানে ৮টি স্টক আছে! আপনি কি অর্ডার কনফার্ম করতে চান?",
+      "timestamp": "2026-10-28T05:57:21.257Z",
+      "status": "read",
+      "isAiGenerated": true,
+      "detectedIntent": "price_and_stock_inquiry",
+      "citedSources": [
+        "Product: AT-PANJABI-ROYAL-NAVY (Variant L: 8 in stock)"
+      ],
+      "suggestedProducts": [
+        "prod-01"
+      ]
+    },
+    {
+      "id": "msg-103",
+      "conversationId": "conv-01",
+      "sender": "customer",
+      "senderName": "Tanjim Ahmed",
+      "text": "Order korbo. Delivery charge koto Uttara te?",
+      "timestamp": "2026-10-28T06:06:21.257Z",
+      "status": "read"
+    },
+    {
+      "id": "msg-104",
+      "conversationId": "conv-01",
+      "sender": "agent",
+      "senderName": "Aura AI Sales Agent",
+      "text": "ঢাকার ভেতরে (উত্তরা সহ) ডেলিভারি চার্জ মাত্র ৳৭০ এবং হোম ডেলিভারিতে ক্যাশ অন ডেলিভারি (COD) সুবিধা পাবেন।\n\nঅর্ডারটি প্লেস করতে আপনার সম্পূর্ণ নাম, মোবাইল নাম্বার এবং বাসার সঠিক ঠিকানাটি লিখে দিন দয়া করে।",
+      "timestamp": "2026-10-28T06:07:21.257Z",
+      "status": "read",
+      "isAiGenerated": true,
+      "detectedIntent": "order_intent_address_request",
+      "citedSources": [
+        "Delivery Rule: Inside Dhaka ৳70"
+      ]
+    },
+    {
+      "id": "msg-105",
+      "conversationId": "conv-01",
+      "sender": "customer",
+      "senderName": "Tanjim Ahmed",
+      "text": "Name: Tanjim Ahmed\nPhone: 01719283741\nAddress: House 14, Road 7, Sector 3, Uttara, Dhaka",
+      "timestamp": "2026-10-28T06:12:21.257Z",
+      "status": "read"
+    },
+    {
+      "id": "msg-106",
+      "conversationId": "conv-01",
+      "sender": "agent",
+      "senderName": "Aura AI Sales Agent",
+      "text": "ধন্যবাদ তানজিম ভাই! আপনার অর্ডারের সারসংক্ষেপ:\n\n📦 পণ্য: Royal Heritage Silk Panjabi (Navy Blue / L)\n💰 মূল্য: ৳২,৩৫০\n🚚 ডেলিভারি চার্জ (ঢাকা): ৳৭০\n💵 সর্বমোট প্রদেয়: ৳২,৪২০ (ক্যাশ অন ডেলিভারি)\n📍 ঠিকানা: House 14, Road 7, Sector 3, Uttara, Dhaka\n\nসবকিছু ঠিক থাকলে দয়া করে \"Confirm\" অথবা \"ঠিক আছে\" লিখে নিশ্চিত করুন।",
+      "timestamp": "2026-10-28T06:13:21.257Z",
+      "status": "read",
+      "isAiGenerated": true,
+      "detectedIntent": "order_summary_presentation"
+    },
+    {
+      "id": "msg-107",
+      "conversationId": "conv-01",
+      "sender": "customer",
+      "senderName": "Tanjim Ahmed",
+      "text": "Ami confirm korchi, order ta finalize kore din.",
+      "timestamp": "2026-10-28T06:14:21.257Z",
+      "status": "read"
+    },
+    {
+      "id": "msg-108",
+      "conversationId": "conv-01",
+      "sender": "agent",
+      "senderName": "Aura AI Sales Agent",
+      "text": "আলহামদুলিল্লাহ! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। 🎉\n\n🆔 অর্ডার নাম্বার: ORD-8942\n📅 আনুমানিক ডেলিভারি: ২৪ থেকে ৪৮ ঘণ্টার মধ্যে\n\nআমাদের ডেলিভারি রাইডার পৌঁছানোর পূর্বে আপনাকে কল করবেন। আভা ট্রেন্ডসের সাথে থাকার জন্য ধন্যবাদ!",
+      "timestamp": "2026-10-28T06:15:21.257Z",
+      "status": "delivered",
+      "isAiGenerated": true,
+      "detectedIntent": "order_created_confirmation"
+    },
+    {
+      "id": "msg-201",
+      "conversationId": "conv-03",
+      "sender": "customer",
+      "senderName": "Sabrina Karim",
+      "text": "Ami kurti ta exchange korte chai, size choto hoyeche. Kono manush kotha bolte parbe?",
+      "timestamp": "2026-10-28T06:18:21.257Z",
+      "status": "read"
+    },
+    {
+      "id": "msg-202",
+      "conversationId": "conv-03",
+      "sender": "system",
+      "senderName": "System Bot",
+      "text": "Conversation escalated to human moderator (Tahmina Akter). AI automation paused for this thread.",
+      "timestamp": "2026-10-28T06:19:21.257Z",
+      "status": "sent"
+    }
+  ],
+  "aiConfigs": {
+    "ws-aura-dhaka-101": {
+      "workspaceId": "ws-aura-dhaka-101",
+      "agentName": "Aura AI Sales Agent",
+      "personality": "Polite, persuasive, and warmly hospitable Bangladeshi retail concierge with deep knowledge of festive and casual fashion.",
+      "businessName": "Aura Trends Dhaka",
+      "businessDescription": "Premium ready-to-wear Panjabi, designer sarees, linen kurtis, and gentlemen casuals in Bangladesh.",
+      "preferredLanguage": "auto",
+      "communicationTone": "friendly",
+      "businessHoursStart": "09:00",
+      "businessHoursEnd": "23:00",
+      "outOfHoursMessage": "আমাদের শোরুম ও কাস্টমার সার্ভিস বর্তমানে বন্ধ রয়েছে। সকাল ৯টায় আমরা আপনার সাথে যোগাযোগ করব। আপনি আপনার অর্ডার বা পণ্যের নাম লিখে রাখতে পারেন।",
+      "outOfHoursAutoReply": true,
+      "recommendationBehavior": "balanced",
+      "confidenceThreshold": 0.85,
+      "humanHandoffTriggers": [
+        "human",
+        "agent",
+        "exchange",
+        "refund",
+        "complain",
+        "manush",
+        "kotha bolbo",
+        "baje service"
+      ],
+      "enableAutomation": true,
+      "shippingPolicy": "ঢাকার মধ্যে ডেলিভারি চার্জ ৳৭০ (২৪-৪৮ ঘণ্টা)। ঢাকার বাইরে ডেলিভারি চার্জ ৳১৩০ (২-৩ দিন)। ঢাকার বাইরে ক্যাশ অন ডেলিভারির ক্ষেত্রে ডেলিভারি চার্জ ৳১৩০ অগ্রিম বিকাশ/নগদে প্রযোজ্য।",
+      "returnPolicy": "ডেলিভারি গ্রহণের পর ৭ দিনের মধ্যে আন-ইউজড অবস্থায় সাইজ বা কালার এক্সচেঞ্জ সুবিধা রয়েছে। রিটার্ন পার্সেল রিসিভ করার পর এক্সচেঞ্জ পণ্য পাঠানো হয়।",
+      "paymentPolicy": "ক্যাশ অন ডেলিভারি (COD), বিকাশ মার্চেন্ট এবং নগদ পেমেন্ট গ্রহণযোগ্য।",
+      "customInstructions": "Always answer in natural polite Bangla or Banglish matching customer style. Never promise out-of-stock items. Calculate exact total including delivery fees. Ask for missing order info step by step.",
+      "prohibitedClaims": [
+        "Never offer unauthorized extra discounts",
+        "Never state that shipping is free unless total exceeds ৳3,000",
+        "Never verify transaction ID automatically without bank confirmation"
+      ]
+    }
+  },
+  "shippingSettings": {
+    "ws-aura-dhaka-101": {
+      "workspaceId": "ws-aura-dhaka-101",
+      "insideDhakaFee": 70,
+      "insideDhakaDeliveryDays": "24-48 Hours",
+      "dhakaSuburbsFee": 100,
+      "outsideDhakaFee": 130,
+      "outsideDhakaDeliveryDays": "2-4 Days (Pathao/Steadfast)",
+      "freeShippingThreshold": 3000,
+      "requireAdvanceForCodOutsideDhaka": true,
+      "advanceAmount": 130,
+      "bkashMerchantNumber": "01711223344",
+      "bkashType": "Merchant",
+      "nagadMerchantNumber": "01855667788",
+      "nagadType": "Merchant",
+      "bankDetails": "City Bank Ltd, Gulshan Branch, A/C: 1102938475001"
+    }
+  },
+  "knowledgeDocs": [
+    {
+      "id": "doc-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "title": "Delivery & Shipping Zones Bangladesh",
+      "category": "policy",
+      "content": "Inside Dhaka metro area: ৳70 delivery fee, 24-48 hours. Dhaka suburbs (Savar, Gazipur, Keraniganj): ৳100. Outside Dhaka: ৳130, courier partner Steadfast Courier and Pathao. Advance delivery charge ৳130 must be paid via bKash/Nagad before shipment outside Dhaka.",
+      "keywords": [
+        "delivery",
+        "charge",
+        "shipping",
+        "dhaka",
+        "outside dhaka",
+        "courier",
+        "steadfast",
+        "pathao"
+      ],
+      "updatedAt": "2026-02-10T10:00:00Z"
+    },
+    {
+      "id": "doc-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "title": "7-Day Hassle-Free Exchange Policy",
+      "category": "policy",
+      "content": "Customers can exchange any product within 7 days of receiving it if size or color does not fit. Tags must remain intact with original packaging. Return courier fee is shared or customer responsibility unless product was defective upon arrival.",
+      "keywords": [
+        "return",
+        "exchange",
+        "size problem",
+        "choto hoyeche",
+        "boro hoyeche",
+        "refund"
+      ],
+      "updatedAt": "2026-02-12T10:00:00Z"
+    },
+    {
+      "id": "doc-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "title": "Payment Verification and bKash / Nagad Process",
+      "category": "policy",
+      "content": "We accept Cash on Delivery (COD) inside Dhaka. For outside Dhaka, ৳130 advance courier charge via bKash Merchant (Make Payment option: 01711223344, Counter 1). Customer must provide the TrxID. Our staff checks the merchant ledger before dispatch.",
+      "keywords": [
+        "bkash",
+        "nagad",
+        "payment",
+        "advance",
+        "trxid",
+        "cod"
+      ],
+      "updatedAt": "2026-02-14T10:00:00Z"
+    }
+  ],
+  "automationRules": [
+    {
+      "id": "rule-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Auto Price & Stock Inquiry AI Responder",
+      "trigger": "price_inquiry",
+      "conditions": [
+        {
+          "field": "message",
+          "operator": "contains",
+          "value": "price"
+        }
+      ],
+      "action": "ai_reply",
+      "actionPayload": "Respond with exact catalog price and available sizes",
+      "enabled": true,
+      "executionCount": 247,
+      "lastExecutedAt": "2026-10-28T05:57:21.257Z"
+    },
+    {
+      "id": "rule-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Out-of-Hours Polite Auto Responder",
+      "trigger": "outside_hours",
+      "conditions": [
+        {
+          "field": "hour",
+          "operator": "greater_than",
+          "value": "23"
+        }
+      ],
+      "action": "send_template",
+      "actionPayload": "Thank you for messaging Aura Trends. Our human sales team will respond at 9:00 AM. Feel free to browse or share your address!",
+      "enabled": true,
+      "executionCount": 42,
+      "lastExecutedAt": "2026-03-23T23:45:00Z"
+    },
+    {
+      "id": "rule-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "name": "Escalate Return/Exchange to Human Moderator",
+      "trigger": "messenger_message",
+      "conditions": [
+        {
+          "field": "message",
+          "operator": "contains",
+          "value": "exchange"
+        }
+      ],
+      "action": "escalate_human",
+      "actionPayload": "Assign to active moderator and flag as urgent",
+      "enabled": true,
+      "executionCount": 18,
+      "lastExecutedAt": "2026-10-28T06:19:21.257Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-01",
+      "workspaceId": "ws-aura-dhaka-101",
+      "userId": "usr-admin-01",
+      "userName": "Nabin Hasan",
+      "action": "PAGE_CONNECTED",
+      "details": "Connected Facebook Page: Aura Trends Dhaka - Official (ID: 109283748291029)",
+      "ipAddress": "103.145.12.8",
+      "timestamp": "2026-01-15T10:30:00Z"
+    },
+    {
+      "id": "log-02",
+      "workspaceId": "ws-aura-dhaka-101",
+      "userId": "usr-admin-01",
+      "userName": "Nabin Hasan",
+      "action": "PRODUCT_CREATED",
+      "details": "Created product: Royal Heritage Semi-Fitted Silk Panjabi (SKU: AT-PANJABI-ROYAL-NAVY)",
+      "ipAddress": "103.145.12.8",
+      "timestamp": "2026-01-20T10:00:00Z"
+    },
+    {
+      "id": "log-03",
+      "workspaceId": "ws-aura-dhaka-101",
+      "userId": "usr-mod-02",
+      "userName": "Tahmina Akter",
+      "action": "ORDER_CONFIRMED",
+      "details": "Verified bKash transaction for order ORD-8941 (৳3,580)",
+      "ipAddress": "103.145.14.22",
+      "timestamp": "2026-03-24T09:30:00Z"
+    }
+  ],
+  "subscriptions": {
+    "ws-aura-dhaka-101": {
+      "workspaceId": "ws-aura-dhaka-101",
+      "plan": "Growth",
+      "monthlyMessageLimit": 15000,
+      "messagesUsedThisMonth": 4280,
+      "aiRepliesUsed": 3950,
+      "activePagesLimit": 5,
+      "activePagesCount": 1,
+      "currentPeriodEnd": "2026-12-31T23:59:59Z",
+      "status": "active"
+    }
+  }
+}
